@@ -34,6 +34,7 @@ const createPaletteGrid = () =>
     '#ff6300',
     '#ffec00',
     '#99ff00',
+    '#28ff00',
     '#28ffe8',
     '#007cff',
     '#0500ff',

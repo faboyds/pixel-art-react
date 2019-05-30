@@ -1,4 +1,5 @@
 import * as types from '../actions/actionTypes';
+import Tone from '../../../node_modules/tone';
 
 export const GRID_INITIAL_COLOR = '#00000000';
 
@@ -52,6 +53,63 @@ const getSameColorAdjacentCells = (frameGrid, columns, rows, id, color) => {
 };
 
 const drawPixel = (pixelGrid, color, id) => pixelGrid.set(id, color);
+
+const playSound = ({color}) => {
+
+  // create a synth and connect it to the master output (your speakers)
+  const synth = new Tone.Synth().toMaster();
+
+  let note = '';
+
+  switch (color) {
+    case '#550000':
+      note = 'F4';
+      break;
+    case '#740000':
+      note = 'F#4';
+      break;
+    case '#b30000':
+      note = 'G4';
+      break;
+    case '#ee0000':
+      note = 'G#4';
+      break;
+    case '#ff6300':
+      note = 'A4';
+      break;
+    case '#ffec00':
+      note = 'A#4';
+      break;
+    case '#99ff00':
+      note = 'G4';
+      break;
+    case '#28ff00':
+      note = 'C5';
+      break;
+    case '#28ffe8':
+      note = 'C#4';
+      break;
+    case '#007cff':
+      note = 'D5';
+      break;
+    case '#0500ff':
+      note = 'D#5';
+      break;
+    case '#4500ea':
+      note = 'E5';
+      break;
+    case '#57009e':
+      note = 'F5';
+      break;
+    case '#55004f':
+      note = 'F#5';
+      break;
+    default:
+      break;
+  }
+
+  synth.triggerAttackRelease(note, "8n");
+};
 
 const applyBucketToGrid = (grid, { id, paletteColor, columns, rows }) => {
   const queue = [id];
@@ -111,6 +169,7 @@ const changeFrameInterval = updateInterval(
 export default function(frames, action) {
   switch (action.type) {
     case types.APPLY_PENCIL:
+      playSound(action);
       return applyPencil(frames, action);
     case types.APPLY_ERASER:
       return applyEraser(frames, action);
