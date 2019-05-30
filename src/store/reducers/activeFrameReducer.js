@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 
-export const GRID_INITIAL_COLOR = '#313131';
+export const GRID_INITIAL_COLOR = '#00000000';
 
 const updateFrameProp = prop => propReducer => (frames, action) => {
   const activeIndex = frames.get('activeIndex');
@@ -97,10 +97,12 @@ const applyBucket = updateGrid(applyBucketToGrid);
 const applyPencil = updateGrid(applyPencilToGrid);
 
 const applyEraser = updateGrid((pixelGrid, { id }) =>
-  drawPixel(pixelGrid, '', id)
+  drawPixel(pixelGrid, GRID_INITIAL_COLOR, id)
 );
 
-const resetGrid = updateGrid(pixelGrid => pixelGrid.map(() => ''));
+const resetGrid = updateGrid(pixelGrid =>
+  pixelGrid.map(() => GRID_INITIAL_COLOR)
+);
 
 const changeFrameInterval = updateInterval(
   (previousInterval, { interval }) => interval

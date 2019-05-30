@@ -4,7 +4,7 @@ import { resetGrid } from '../store/actions/actionCreators';
 
 const Reset = props => (
   <button className="reset" onClick={props.resetGrid}>
-    RESET
+    Reset
   </button>
 );
 

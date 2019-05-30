@@ -2,11 +2,13 @@ import { List, Map, fromJS } from 'immutable';
 import shortid from 'shortid';
 import * as types from '../actions/actionTypes';
 
+export const GRID_INITIAL_COLOR = '#00000000';
+
 const createGrid = numCells => {
   let newGrid = List();
   // Set every cell with the initial color
   for (let i = 0; i < numCells; i++) {
-    newGrid = newGrid.push('');
+    newGrid = newGrid.push(GRID_INITIAL_COLOR);
   }
   return newGrid;
 };
@@ -20,7 +22,7 @@ const resizeGrid = (grid, gridProperty, increment, dimensions) => {
     if (increment > 0) {
       // Add a row at the end
       for (let i = totalCells; i > 0; i -= dimensions.columns) {
-        newGrid = newGrid.insert(i, '');
+        newGrid = newGrid.insert(i, GRID_INITIAL_COLOR);
       }
     } else {
       for (let i = totalCells; i > 0; i -= dimensions.columns) {
@@ -32,7 +34,7 @@ const resizeGrid = (grid, gridProperty, increment, dimensions) => {
     if (increment > 0) {
       // Add a row at the end
       for (let i = 0; i < dimensions.columns; i++) {
-        newGrid = newGrid.push('');
+        newGrid = newGrid.push(GRID_INITIAL_COLOR);
       }
     } else {
       // Remove the last row

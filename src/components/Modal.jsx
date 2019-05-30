@@ -73,12 +73,14 @@ class Modal extends React.Component {
     const radioOptions =
       props.type !== 'load' ? (
         <div className="modal__preview">
+          {/*
           <RadioSelector
             name="preview-type"
             selected={this.state.previewType}
             change={this.changeRadioType}
             options={options}
           />
+          */}
           {this.state.previewType !== 'spritesheet' ? (
             <div className="modal__preview--wrapper">
               <Preview

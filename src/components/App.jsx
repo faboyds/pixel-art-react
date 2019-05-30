@@ -1,16 +1,9 @@
 import React from 'react';
 import CookieBanner from 'react-cookie-banner';
 import PixelCanvasContainer from './PixelCanvas';
-import CellSizeContainer from './CellSize';
-import ColorPickerContainer from './ColorPicker';
 import ModalContainer from './Modal';
 import DimensionsContainer from './Dimensions';
-import CssDisplayContainer from './CssDisplay';
-import DurationContainer from './Duration';
 import EraserContainer from './Eraser';
-import BucketContainer from './Bucket';
-import EyedropperContainer from './Eyedropper';
-import FramesHandlerContainer from './FramesHandler';
 import PaletteGridContainer from './PaletteGrid';
 import ResetContainer from './Reset';
 import SaveDrawingContainer from './SaveDrawing';
@@ -84,9 +77,7 @@ export default class App extends React.Component {
               `
               : null
           }
-        >
-          <FramesHandlerContainer />
-        </div>
+        />
         <div className="app__central-container">
           <div className="left col-1-4">
             <div className="app__left-side">
@@ -107,7 +98,7 @@ export default class App extends React.Component {
                           : null
                       }
                     >
-                      LOAD
+                      Load
                     </button>
                     <div
                       data-tooltip={
@@ -130,6 +121,8 @@ export default class App extends React.Component {
                     >
                       <EraserContainer />
                     </div>
+
+                    {/*
                     <div
                       data-tooltip={
                         this.state.helpOn
@@ -142,21 +135,24 @@ export default class App extends React.Component {
                     <div
                       data-tooltip={
                         this.state.helpOn
-                          ? 'It fills an area of the current frame based on color similarity'
-                          : null
-                      }
-                    >
-                      <BucketContainer />
-                    </div>
-                    <div
-                      data-tooltip={
-                        this.state.helpOn
                           ? 'Choose a new color that is not in your palette'
                           : null
                       }
                     >
                       <ColorPickerContainer />
+                      <div
+                        data-tooltip={
+                          this.state.helpOn
+                            ? 'It fills an area of the current frame based on color similarity'
+                            : null
+                        }
+                      >
+                         <BucketContainer />
+
+                      </div>
+
                     </div>
+                    */}
                   </div>
                 </div>
                 <div className="app__mobile--group">
@@ -164,6 +160,7 @@ export default class App extends React.Component {
                 </div>
               </div>
               <div className="app__mobile--container">
+                {/*
                 <div className="app__mobile--group">
                   <button
                     className="app__copycss-button"
@@ -177,8 +174,10 @@ export default class App extends React.Component {
                     css
                   </button>
                 </div>
+                */}
                 <div className="app__mobile--group">
                   <div className="app__social-container">
+                    {/*
                     <div
                       data-tooltip={
                         this.state.helpOn
@@ -193,6 +192,7 @@ export default class App extends React.Component {
                         }}
                       />
                     </div>
+                    */}
                     <div
                       data-tooltip={
                         this.state.helpOn
@@ -241,7 +241,7 @@ export default class App extends React.Component {
                         : null
                     }
                   >
-                    PREVIEW
+                    Preview
                   </button>
                   <div
                     data-tooltip={
@@ -258,6 +258,7 @@ export default class App extends React.Component {
                     <DimensionsContainer />
                   </div>
                 </div>
+                {/*
                 <div className="app__mobile--group">
                   <div
                     data-tooltip={
@@ -266,21 +267,17 @@ export default class App extends React.Component {
                   >
                     <CellSizeContainer />
                   </div>
-                  <div
-                    data-tooltip={
-                      this.state.helpOn ? 'Animation duration in seconds' : null
-                    }
-                  >
-                    <DurationContainer />
-                  </div>
                 </div>
+                */}
               </div>
             </div>
           </div>
         </div>
+        {/*
         <div className="css-container">
           <CssDisplayContainer />
         </div>
+        */}
         {this.state.showCookiesBanner ? (
           <CookieBanner
             disableStyle

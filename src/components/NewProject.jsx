@@ -15,7 +15,7 @@ const NewProject = props => {
           newProject();
         }}
       >
-        NEW
+        New
       </button>
     </div>
   );

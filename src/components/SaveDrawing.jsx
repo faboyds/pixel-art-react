@@ -29,7 +29,7 @@ const SaveDrawing = props => {
           save();
         }}
       >
-        SAVE
+        Save
       </button>
     </div>
   );

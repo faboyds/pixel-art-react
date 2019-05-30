@@ -19,7 +19,9 @@ export default class PixelCell extends React.Component {
     const styles = {
       width: `${width}%`,
       paddingBottom: `${width}%`,
-      backgroundColor: color || GRID_INITIAL_COLOR
+      backgroundColor: color || GRID_INITIAL_COLOR,
+      borderRadius: '0px 0px 0px 0px',
+      border: '1px solid #383530'
     };
 
     return (

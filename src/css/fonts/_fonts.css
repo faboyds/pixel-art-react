@@ -24,6 +24,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url('fonts/files/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @define-mixin icon $type {
   display: inline-block;
   font: normal normal normal 14px/1 WebFontIcons;

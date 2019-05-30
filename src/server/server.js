@@ -44,27 +44,6 @@ if (ENV === 'development') {
   configData = process.env;
 }
 
-const oa = new OAuth(
-  'https://api.twitter.com/oauth/request_token',
-  'https://api.twitter.com/oauth/access_token',
-  configData.TWITTER_CONSUMER_KEY,
-  configData.TWITTER_CONSUMER_SECRET,
-  '1.0A',
-  configData.TWITTER_CALLBACK_URL,
-  'HMAC-SHA1'
-);
-
-app.use((req, res, next) => {
-  const host = req.get('Host');
-  if (host === configData.LEGACY_DOMAIN) {
-    return res.redirect(301, configData.ACTIVE_DOMAIN);
-  }
-  if (req.headers['x-forwarded-proto'] !== 'https' && ENV !== 'development') {
-    return res.redirect(301, configData.ACTIVE_DOMAIN);
-  }
-  return next();
-});
-
 app.set('views', `${__dirname}/../views`);
 app.set('view engine', 'pug');
 app.use(express.static(`${__dirname}/../../deploy`));
@@ -111,38 +90,7 @@ function handleRender(req, res) {
   // Send the rendered page back to the client
   res.render('index.pug', {
     reactOutput: html,
-    initialState: JSON.stringify(initialState),
-    googleAnalyticsId: configData.GOOGLE_ANALYTICS_ID
-  });
-}
-
-/**
- * Twitter upload helper
- */
-function tweetWithMedia(client, request, response, path) {
-  // Tweet message and drawing
-  let filePath = path;
-  if (path.indexOf('images/tmp') === -1) {
-    filePath = `${__dirname}/../../images/tmp/${path}`;
-  }
-  const data = fs.readFileSync(filePath);
-  client.post('media/upload', { media: data }, (err, media) => {
-    if (!err) {
-      // If successful, a media object will be returned.
-      const status = {
-        status: request.session.cssData.text,
-        media_ids: media.media_id_string // Pass the media id string
-      };
-      client.post('statuses/update', status, e => {
-        if (!e) {
-          // Success
-          response.redirect('/');
-        }
-        fs.unlinkSync(filePath);
-      });
-    } else {
-      fs.unlinkSync(filePath);
-    }
+    initialState: JSON.stringify(initialState)
   });
 }
 
@@ -150,84 +98,6 @@ function tweetWithMedia(client, request, response, path) {
  * Routes
  */
 app.get('/', handleRender);
-
-app.post('/auth/twitter', (req, res) => {
-  oa.getOAuthRequestToken((error, oauthToken, oauthTokenSecret) => {
-    if (error) {
-      res.status(500).send('auth twitter: error');
-    } else {
-      try {
-        const request = req;
-
-        request.session.oauthRequestToken = oauthToken;
-        request.session.oauthRequestTokenSecret = oauthTokenSecret;
-
-        request.body.drawingData = JSON.parse(request.body.drawingData);
-        request.session.cssData = request.body;
-
-        res.contentType('application/json');
-        const data = JSON.stringify(
-          `https://twitter.com/oauth/authenticate?oauth_token=${oauthToken}`
-        );
-        res.header('Content-Length', data.length);
-        res.end(data);
-      } catch (e) {
-        res.status(500).send('auth twitter: error');
-      }
-    }
-  });
-});
-
-app.get('/auth/twitter/callback', (req, res, next) => {
-  if (req.query) {
-    oa.getOAuthAccessToken(
-      req.session.oauthRequestToken,
-      req.session.oauthRequestTokenSecret,
-      req.query.oauth_verifier,
-      (error, oauthAccessToken, oauthAccessTokenSecret) => {
-        if (error) {
-          res.send('auth twitter callback: error');
-        } else {
-          const request = req;
-          const randomName = temp.path();
-          const imgPath = `images${randomName}`;
-          const client = new Twitter({
-            consumer_key: configData.TWITTER_CONSUMER_KEY,
-            consumer_secret: configData.TWITTER_CONSUMER_SECRET,
-            access_token_key: oauthAccessToken,
-            access_token_secret: oauthAccessTokenSecret
-          });
-
-          request.session.oauthAccessToken = oauthAccessToken;
-          request.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
-
-          switch (request.session.cssData.type) {
-            case 'animation':
-              drawGif(request.session.cssData, imgPath, false, gifPath => {
-                tweetWithMedia(client, request, res, gifPath);
-              });
-              break;
-            case 'spritesheet':
-              drawSpritesheet(
-                request.session.cssData,
-                imgPath,
-                spritesheetPath => {
-                  tweetWithMedia(client, request, res, spritesheetPath);
-                }
-              );
-              break;
-            default:
-              drawFrame(request.session.cssData, imgPath, singleFramePath => {
-                tweetWithMedia(client, request, res, singleFramePath);
-              });
-          }
-        }
-      }
-    );
-  } else {
-    next(new Error('auth twitter callback: error'));
-  }
-});
 
 app.listen(process.env.PORT || PORTSERVER, () => {
   console.log(

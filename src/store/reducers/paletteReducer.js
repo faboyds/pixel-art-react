@@ -27,19 +27,21 @@ const addColorToLastGridCell = (palette, newColor) => {
 
 const createPaletteGrid = () =>
   List([
-    '#000000',
-    '#ff0000',
-    '#e91e63',
-    '#9c27b0',
-    '#673ab7',
-    '#3f51b5',
-    '#2196f3',
-    '#03a9f4',
-    '#00bcd4',
-    '#009688',
-    '#4caf50',
-    '#8bc34a',
-    '#cddc39',
+    '#550000',
+    '#740000',
+    '#b30000',
+    '#ee0000',
+    '#ff6300',
+    '#ffec00',
+    '#99ff00',
+    '#28ffe8',
+    '#007cff',
+    '#0500ff',
+    '#4500ea',
+    '#57009e',
+    '#55004f'
+
+    /*
     '#9ee07a',
     '#ffeb3b',
     '#ffc107',
@@ -57,6 +59,7 @@ const createPaletteGrid = () =>
     '#383532',
     '#383531',
     '#383530'
+    */
   ]).map(color => Map({ color, id: shortid.generate() }));
 
 const isColorSelected = palette => palette.get('position') !== -1;
