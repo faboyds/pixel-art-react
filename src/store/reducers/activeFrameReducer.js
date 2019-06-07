@@ -3,6 +3,11 @@ import Tone from '../../../node_modules/tone';
 
 export const GRID_INITIAL_COLOR = '#00000000';
 
+// create a synth and connect it to the master output (your speakers)
+const synth = new Tone.Synth().toMaster();
+
+let musicTimeouts = [];
+
 const updateFrameProp = prop => propReducer => (frames, action) => {
   const activeIndex = frames.get('activeIndex');
   return frames.updateIn(['list', activeIndex, prop], stateProp =>
@@ -54,16 +59,19 @@ const getSameColorAdjacentCells = (frameGrid, columns, rows, id, color) => {
 
 const drawPixel = (pixelGrid, color, id) => pixelGrid.set(id, color);
 
-const playSound = (frames, {color, paletteColor}) => {
-  // compares current color to palette color being painted
-  if (color !== paletteColor) {
+const setCurrentPixel = (pixelGrid, color, id) => pixelGrid.set(id, color);
 
-    // create a synth and connect it to the master output (your speakers)
-    const synth = new Tone.Synth().toMaster();
+const playSound = ({color, paletteColor: colorToPlay}) => {
+
+  // const activeIndex = frames.get('activeIndex');
+  // const currentColor = frames.getIn(['list', activeIndex, 'grid']).get(id);
+
+  // compares current color to palette color being painted
+  if (color !== colorToPlay) {
 
     let note = '';
 
-    switch (paletteColor) {
+    switch (colorToPlay) {
       case '#550000':
         note = 'F4';
         break;
@@ -169,11 +177,47 @@ const changeFrameInterval = updateInterval(
   (previousInterval, { interval }) => interval
 );
 
+const playGridMusic = (frames, action) => {
+
+  const activeIndex = frames.get('activeIndex');
+  const grid = frames.getIn(['list', activeIndex, 'grid']);
+
+  let i = 0;
+  for (const cell of grid) {
+
+    musicTimeouts.push(setTimeout(() => {
+      playSound({ color: '', paletteColor: cell });
+    }, 500 * i));
+
+    i +=1;
+  }
+};
+
+export const stopGridMusic = () => {
+
+  for (const to of musicTimeouts) {
+    clearTimeout(to);
+  }
+  musicTimeouts = [];
+};
+
+
+const setCurrentCell = (frames, action)  => {
+
+  const activeIndex = frames.get('activeIndex');
+  const grid = frames.getIn(['list', activeIndex, 'grid']);
+
+  playSound({ color: '', paletteColor: grid.get(action.currentCell) });
+};
+
 export default function(frames, action) {
   switch (action.type) {
     case types.APPLY_PENCIL:
-      playSound(frames, action);
+      playSound(action);
       return applyPencil(frames, action);
+    case types.SET_CURRENT_CELL:
+      setCurrentCell(frames, action);
+      return frames;
     case types.APPLY_ERASER:
       return applyEraser(frames, action);
     case types.APPLY_BUCKET:
@@ -182,6 +226,9 @@ export default function(frames, action) {
       return resetGrid(frames);
     case types.CHANGE_FRAME_INTERVAL:
       return changeFrameInterval(frames, action);
+    case types.PLAY_MUSIC:
+      playGridMusic(frames, action);
+      return frames;
     default:
       return frames;
   }

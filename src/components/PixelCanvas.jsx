@@ -44,6 +44,7 @@ class PixelCanvas extends React.Component {
 
     return (
       <GridWrapper
+        currentCell={props.currentCell}
         cells={cells}
         classes={`${gridContainerClass} ${gridExtraClass}`}
         drawHandlers={this.drawHandlers}
@@ -53,6 +54,7 @@ class PixelCanvas extends React.Component {
 }
 
 const mapStateToProps = state => {
+  const currentCell = state.present.get('currentCell');
   const frames = state.present.get('frames');
   const activeFrameIndex = frames.get('activeIndex');
   const drawingTool = state.present.get('drawingTool');
@@ -60,6 +62,7 @@ const mapStateToProps = state => {
   const position = palette.get('position');
   const paletteCellPosition = position === -1 ? 0 : position;
   return {
+    currentCell,
     grid: frames.getIn(['list', activeFrameIndex, 'grid']),
     columns: frames.get('columns'),
     rows: frames.get('rows'),

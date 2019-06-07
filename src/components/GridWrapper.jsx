@@ -10,6 +10,7 @@ export default class GridWrapper extends React.Component {
     const { props } = this;
     return (
       <PixelGrid
+        currentCell={props.currentCell}
         cells={props.cells}
         drawHandlers={props.drawHandlers}
         classes={props.classes}

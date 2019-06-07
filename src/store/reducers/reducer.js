@@ -1,7 +1,7 @@
 import { List, Map } from 'immutable';
 import paletteReducer from './paletteReducer';
 import framesReducer from './framesReducer';
-import activeFrameReducer from './activeFrameReducer';
+import { default as activeFrameReducer, stopGridMusic} from './activeFrameReducer';
 import drawingToolReducer from './drawingToolReducer';
 import * as types from '../actions/actionTypes';
 
@@ -12,7 +12,9 @@ function setInitialState(state) {
     cellSize,
     loading: false,
     notifications: List(),
-    duration: 1
+    duration: 1,
+    playingMusic: false,
+    currentCell: 0,
   };
 
   return state.merge(initialState);
@@ -26,12 +28,25 @@ function setCellSize(state, cellSize) {
   return state.merge({ cellSize });
 }
 
+function setCurrentCell(state, action) {
+  return state.set('currentCell', action.currentCell);
+}
+
 function showSpinner(state) {
   return state.merge({ loading: true });
 }
 
 function hideSpinner(state) {
   return state.merge({ loading: false });
+}
+
+function playMusic(state) {
+  return state.merge({ playingMusic: true });
+}
+
+function stopMusic(state) {
+  stopGridMusic();
+  return state.merge({ playingMusic: false });
 }
 
 function sendNotification(state, message) {
@@ -55,7 +70,7 @@ function updateGridBoundaries(state, action) {
 }
 
 function generateDefaultState() {
-  return setInitialState(Map(), { type: types.SET_INITIAL_STATE, state: {} });
+  return setInitialState(Map(), { type: types.SET_INITIAL_STATE, state: { } });
 }
 
 const pipeReducers = reducers => (initialState, action) =>
@@ -69,10 +84,16 @@ function partialReducer(state, action) {
       return setDrawing(state, action);
     case types.SET_CELL_SIZE:
       return setCellSize(state, action.cellSize);
+    case types.SET_CURRENT_CELL:
+      return setCurrentCell(state, action);
     case types.SHOW_SPINNER:
       return showSpinner(state);
     case types.HIDE_SPINNER:
       return hideSpinner(state);
+    case types.PLAY_MUSIC:
+      return playMusic(state);
+    case types.STOP_MUSIC:
+      return stopMusic(state);
     case types.SEND_NOTIFICATION:
       return sendNotification(state, action.message);
     case types.SET_DURATION:

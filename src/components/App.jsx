@@ -1,4 +1,6 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import CookieBanner from 'react-cookie-banner';
 import PixelCanvasContainer from './PixelCanvas';
 import ModalContainer from './Modal';
@@ -11,10 +13,14 @@ import NewProjectContainer from './NewProject';
 import SimpleNotificationContainer from './SimpleNotification';
 import SimpleSpinnerContainer from './SimpleSpinner';
 import UndoRedoContainer from './UndoRedo';
+import PlayMusicContainer from './PlayMusic';
 import initialSetup from '../utils/startup';
 import drawHandlersProvider from '../utils/drawHandlersProvider';
+import * as actionCreators from '../store/actions/actionCreators';
 
-export default class App extends React.Component {
+let shiftIsPressed = false;
+
+export class App extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -24,10 +30,41 @@ export default class App extends React.Component {
       showCookiesBanner: true
     };
     Object.assign(this, drawHandlersProvider(this));
+
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
   componentDidMount() {
     initialSetup(this.props.dispatch, localStorage);
+  }
+
+
+  handleKeyDown(e) {
+    e.preventDefault();
+
+    if (e.keyCode === 9 && !shiftIsPressed /* tab */) {
+      this.props.actions.setCurrentCell(this.props.currentCell + 1);
+
+    }
+
+    if (e.keyCode === 9 && shiftIsPressed /* shift + tab */) {
+      this.props.actions.setCurrentCell(this.props.currentCell - 1);
+
+    }
+
+    if (e.keyCode === 16 /* shift */) {
+      shiftIsPressed = true;
+    }
+
+  }
+
+  handleKeyUp(e) {
+    e.preventDefault();
+
+    if (e.keyCode === 16 /* shift */) {
+      shiftIsPressed = false;
+    }
   }
 
   changeModalType(type) {
@@ -60,6 +97,8 @@ export default class App extends React.Component {
         onMouseUp={this.onMouseUp}
         onTouchEnd={this.onMouseUp}
         onTouchCancel={this.onMouseUp}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}
       >
         <SimpleSpinnerContainer />
         <SimpleNotificationContainer
@@ -230,6 +269,7 @@ export default class App extends React.Component {
             <div className="app__right-side">
               <div className="app__mobile--container">
                 <div className="app__mobile--group">
+                  { /*
                   <button
                     className="app__preview-button"
                     onClick={() => {
@@ -243,6 +283,14 @@ export default class App extends React.Component {
                   >
                     Preview
                   </button>
+                    */ }
+                  <div
+                    data-tooltip={
+                      this.state.helpOn ? 'Play your song' : null
+                    }
+                  >
+                    <PlayMusicContainer />
+                  </div>
                   <div
                     data-tooltip={
                       this.state.helpOn ? 'Reset the selected frame' : null
@@ -309,3 +357,17 @@ export default class App extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  currentCell: state.present.getIn(['currentCell']),
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actionCreators, dispatch)
+});
+
+const AppContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+export default AppContainer;

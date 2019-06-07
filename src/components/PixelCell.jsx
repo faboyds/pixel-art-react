@@ -14,6 +14,7 @@ export default class PixelCell extends React.Component {
     const {
       cell: { color, width },
       id,
+      isCurrentCell,
       drawHandlers: { onMouseDown, onMouseOver }
     } = this.props;
     const styles = {
@@ -23,6 +24,10 @@ export default class PixelCell extends React.Component {
       borderRadius: '0px 0px 0px 0px',
       border: '1px solid #383530'
     };
+
+    if(isCurrentCell) {
+      styles.border = '1px solid #ffffff';
+    }
 
     return (
       <div

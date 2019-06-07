@@ -79,10 +79,29 @@ export function switchTool(tool) {
   };
 }
 
+export function playMusic() {
+  return {
+    type: types.PLAY_MUSIC
+  };
+}
+
+export function stopMusic() {
+  return {
+    type: types.STOP_MUSIC
+  };
+}
+
 export function setCellSize(cellSize) {
   return {
     type: types.SET_CELL_SIZE,
     cellSize
+  };
+}
+
+export function setCurrentCell(currentCell) {
+  return {
+    type: types.SET_CURRENT_CELL,
+    currentCell
   };
 }
 

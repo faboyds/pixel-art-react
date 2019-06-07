@@ -1,0 +1,7 @@
+.play-music {
+  button {
+    @mixin button gray;
+
+    width: 100%;
+  }
+}
