@@ -44,13 +44,15 @@ export class App extends React.Component {
     e.preventDefault();
 
     if (e.keyCode === 9 && !shiftIsPressed /* tab */) {
-      this.props.actions.setCurrentCell(this.props.currentCell + 1);
-
+      if (this.props.currentCell < this.props.countCells-1) {
+        this.props.actions.setCurrentCell(this.props.currentCell + 1);
+      }
     }
 
     if (e.keyCode === 9 && shiftIsPressed /* shift + tab */) {
-      this.props.actions.setCurrentCell(this.props.currentCell - 1);
-
+      if (this.props.currentCell > 0) {
+        this.props.actions.setCurrentCell(this.props.currentCell - 1);
+      }
     }
 
     if (e.keyCode === 16 /* shift */) {
@@ -359,6 +361,7 @@ export class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  countCells: state.present.get('frames').get('columns') * state.present.get('frames').get('rows'),
   currentCell: state.present.getIn(['currentCell']),
 });
 
