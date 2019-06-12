@@ -1,6 +1,7 @@
 /**
  * Module dependencies.
  */
+import socket from 'socket.io';
 import { renderToString } from 'react-dom/server';
 import undoable, { includeAction } from 'redux-undo';
 import express from 'express';
@@ -39,7 +40,7 @@ const PORTSERVER = 3000;
 const ENV = process.env.NODE_ENV || 'development';
 
 if (ENV === 'development') {
-  //configData = JSON.parse(fs.readFileSync('config.json', 'utf8')).dev;
+  // configData = JSON.parse(fs.readFileSync('config.json', 'utf8')).dev;
 } else {
   configData = process.env;
 }
@@ -52,7 +53,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: 'secretsupersecret', //configData.EXPRESS_SESSION_SECRET,
+    secret: 'secretsupersecret', // configData.EXPRESS_SESSION_SECRET,
     resave: true,
     saveUninitialized: true
   })
@@ -99,10 +100,17 @@ function handleRender(req, res) {
  */
 app.get('/', handleRender);
 
-app.listen(process.env.PORT || PORTSERVER, () => {
+const server = app.listen(process.env.PORT || PORTSERVER, () => {
   console.log(
     'Express server listening on port %d in %s mode',
     process.env.PORT || PORTSERVER,
     app.settings.env
   );
+});
+
+// Socket setup
+const io = socket(server);
+
+io.on('connection', socket => {
+  console.log('made socket connection');
 });
