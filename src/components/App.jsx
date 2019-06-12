@@ -18,6 +18,9 @@ import initialSetup from '../utils/startup';
 import drawHandlersProvider from '../utils/drawHandlersProvider';
 import * as actionCreators from '../store/actions/actionCreators';
 
+import WebMidi from 'webmidi';
+
+let midiInput;
 
 export class App extends React.Component {
   constructor() {
@@ -37,6 +40,26 @@ export class App extends React.Component {
 
   componentDidMount() {
     initialSetup(this.props.dispatch, localStorage);
+
+    const that = this;
+
+    WebMidi.enable((err) => {
+
+      if (err) {
+        console.log("WebMidi could not be enabled.", err);
+        return;
+      } else {
+        console.log("WebMidi enabled!");
+      }
+
+      midiInput = WebMidi.inputs[0];
+
+      midiInput.addListener('noteon', 'all',
+        (e) => {
+          console.log(`Received 'noteon' message (${  e.note.name  }${e.note.octave  }).`);
+       });
+
+    });
   }
 
   handleKeyDown(e) {
