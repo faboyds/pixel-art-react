@@ -3,9 +3,6 @@ import Tone from '../../../node_modules/tone';
 
 export const GRID_INITIAL_COLOR = '#00000000';
 
-// create a synth and connect it to the master output (your speakers)
-const synth = new Tone.Synth().toMaster();
-
 let musicTimeouts = [];
 
 const updateFrameProp = prop => propReducer => (frames, action) => {
@@ -118,6 +115,7 @@ const playSound = ({color, paletteColor: colorToPlay}) => {
         break;
     }
 
+    const synth = new Tone.Synth().toMaster();
     synth.triggerAttackRelease(note, "8n");
   }
 };

@@ -18,7 +18,6 @@ import initialSetup from '../utils/startup';
 import drawHandlersProvider from '../utils/drawHandlersProvider';
 import * as actionCreators from '../store/actions/actionCreators';
 
-let shiftIsPressed = false;
 
 export class App extends React.Component {
   constructor() {
@@ -27,7 +26,8 @@ export class App extends React.Component {
       modalType: null,
       modalOpen: false,
       helpOn: false,
-      showCookiesBanner: true
+      showCookiesBanner: true,
+      shiftIsPressed: false,
     };
     Object.assign(this, drawHandlersProvider(this));
 
@@ -39,24 +39,23 @@ export class App extends React.Component {
     initialSetup(this.props.dispatch, localStorage);
   }
 
-
   handleKeyDown(e) {
     e.preventDefault();
 
-    if (e.keyCode === 9 && !shiftIsPressed /* tab */) {
+    if (e.keyCode === 9 && !this.state.shiftIsPressed /* tab */) {
       if (this.props.currentCell < this.props.countCells-1) {
         this.props.actions.setCurrentCell(this.props.currentCell + 1);
       }
     }
 
-    if (e.keyCode === 9 && shiftIsPressed /* shift + tab */) {
+    if (e.keyCode === 9 && this.state.shiftIsPressed /* shift + tab */) {
       if (this.props.currentCell > 0) {
         this.props.actions.setCurrentCell(this.props.currentCell - 1);
       }
     }
 
     if (e.keyCode === 16 /* shift */) {
-      shiftIsPressed = true;
+      this.setState({shiftIsPressed: true});
     }
 
   }
@@ -65,7 +64,15 @@ export class App extends React.Component {
     e.preventDefault();
 
     if (e.keyCode === 16 /* shift */) {
-      shiftIsPressed = false;
+      this.setState({shiftIsPressed: false});
+    }
+
+    if (e.keyCode === 17 && this.state.shiftIsPressed /* shift + ctrl */) {
+      if (!this.props.playingMusic) {
+        this.props.actions.playMusic();
+      } else {
+        this.props.actions.stopMusic();
+      }
     }
   }
 
@@ -363,6 +370,7 @@ export class App extends React.Component {
 const mapStateToProps = state => ({
   countCells: state.present.get('frames').get('columns') * state.present.get('frames').get('rows'),
   currentCell: state.present.getIn(['currentCell']),
+  playingMusic: state.present.getIn(['playingMusic']),
 });
 
 const mapDispatchToProps = dispatch => ({

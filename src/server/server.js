@@ -39,7 +39,7 @@ const PORTSERVER = 3000;
 const ENV = process.env.NODE_ENV || 'development';
 
 if (ENV === 'development') {
-  configData = JSON.parse(fs.readFileSync('config.json', 'utf8')).dev;
+  //configData = JSON.parse(fs.readFileSync('config.json', 'utf8')).dev;
 } else {
   configData = process.env;
 }
@@ -52,7 +52,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: configData.EXPRESS_SESSION_SECRET,
+    secret: 'secretsupersecret', //configData.EXPRESS_SESSION_SECRET,
     resave: true,
     saveUninitialized: true
   })
