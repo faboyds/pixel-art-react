@@ -1,11 +1,8 @@
 import * as types from '../actions/actionTypes';
 import Tone from '../../../node_modules/tone';
-import io from 'socket.io-client';
-import { emitApplyPencilToGrid } from '../../socket/socketHandler';
+import {emitApplyPencilToGrid } from '../../socket/socketHandler';
 
 export const GRID_INITIAL_COLOR = '#00000000';
-
-const socket = io.connect('http://localhost:3000');
 
 let musicTimeouts = [];
 
@@ -161,11 +158,7 @@ const applyBucketToGrid = (grid, { id, paletteColor, columns, rows }) => {
 };
 
 const applyPencilToGrid = (pixelGrid, { paletteColor, id }) => {
-  socket.on('apply-pencil', data => {
-    drawPixel(data.pixelGrid, data.palleteColor, data.id);
-  });
-
-  emitApplyPencilToGrid(pixelGrid, paletteColor, id);
+  emitApplyPencilToGrid(paletteColor, id);
   drawPixel(pixelGrid, paletteColor, id);
 };
 

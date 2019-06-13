@@ -111,10 +111,10 @@ const server = app.listen(process.env.PORT || PORTSERVER, () => {
 // Socket setup
 const io = socket(server);
 
-io.on('connection', socket => {
-  console.log('made socket connection', socket.id);
+io.on('connection', sock => {
+  console.log('made socket connection', sock.id);
 
-  socket.on('chat', data => {
-    io.sockets.emit('chat', data);
+  sock.on('apply-pencil', data => {
+    sock.broadcast.emit('apply-pencil', data);
   });
 });
