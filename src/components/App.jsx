@@ -399,6 +399,19 @@ export class App extends React.Component {
             </div>
           </div>
         </div>
+
+
+        <div>
+          <h4>Short cuts</h4>
+          <ul>
+            <li><b>Tab</b> - move one cell forward</li>
+            <li><b>Shift + Tab</b> - move one cell backward</li>
+            <li><b>Ctrl</b> - play current cell sound</li>
+            <li><b>Shift + Ctrl</b> - Play/Stop music</li>
+            <li><b>Caps Lock</b> - Play help sound</li>
+          </ul>
+        </div>
+
         {/*
         <div className="css-container">
           <CssDisplayContainer />
