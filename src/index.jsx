@@ -9,7 +9,7 @@ const devMode = process.env.NODE_ENV === 'development';
 const store = configureStore(devMode);
 
 
-const socket = io.connect('https://pixel-to-music.herokuapp.com:8080');
+const socket = io.connect('https://pixel-to-music.herokuapp.com:12554');
 
 /*
 send.addEventListener('click', () => {
