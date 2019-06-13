@@ -13,11 +13,11 @@
     "validate": "npm run lint && npm run csslint && npm run prettier -- --list-different && npm run test",
     "_precommit": "lint-staged",
     "development": "webpack-dev-server --hot",
-    "deploy": "SET NODE_ENV=production webpack -p --config webpack.production.config.js",
+    "deploy": "SET NODE_ENV=production & webpack -p --config webpack.production.config.js",
     "server": "node ./src/server/loader",
     "server-debug": "node --inspect ./src/server/loader",
     "start": "npm run server",
-    "postinstall": "SET NODE_ENV=production webpack -p --config webpack.production.config.js"
+    "postinstall": "SET NODE_ENV=production & webpack -p --config webpack.production.config.js"
   },
   "main": "index.js",
   "repository": {
