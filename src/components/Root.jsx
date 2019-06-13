@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import App from './App';
 
-const Root = ({ store }) => (
+const Root = ({ store, socket }) => (
   <Provider store={store}>
-    <App dispatch={store.dispatch} />
+    <App socket={socket} dispatch={store.dispatch} />
   </Provider>
 );
 

@@ -114,7 +114,8 @@ const io = socket(server);
 io.on('connection', socket => {
   console.log('made socket connection', socket.id);
 
-  socket.on('chat', data => {
-    io.sockets.emit('chat', data);
+  socket.on('apply-sound-to-cell', data => {
+    console.log(data);
+    socket.broadcast.emit('apply-sound-to-cell', data);
   });
 });

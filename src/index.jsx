@@ -9,7 +9,7 @@ const devMode = process.env.NODE_ENV === 'development';
 const store = configureStore(devMode);
 
 
-let socket = io.connect('http://localhost:3000');
+const socket = io.connect('http://localhost:3000');
 
 /*
 send.addEventListener('click', () => {
@@ -27,4 +27,4 @@ socket.on('chat', data => {
 */
 
 
-ReactDOM.render(<Root store={store} />, document.getElementById('app'));
+ReactDOM.render(<Root socket={socket} store={store} />, document.getElementById('app'));

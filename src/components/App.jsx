@@ -22,7 +22,7 @@ import * as actionCreators from '../store/actions/actionCreators';
 
 let midiInput;
 
-const speech = new Speech();
+let speech;
 
 export class App extends React.Component {
   constructor() {
@@ -45,6 +45,10 @@ export class App extends React.Component {
 
     const that = this;
 
+    this.props.socket.on('apply-sound-to-cell', data => {
+      that.props.actions.applySoundToCell(data.note, data.id);
+    });
+
     WebMidi.enable((err) => {
 
       if (err) {
@@ -62,12 +66,19 @@ export class App extends React.Component {
             console.log(`Received 'noteon' message (${e.note.name}${e.note.octave}).`);
 
             if (!that.props.playingMusic) {
+
+              this.props.socket.emit('apply-sound-to-cell', {
+                note: e.note.name + e.note.octave,
+                id: that.props.currentCell
+              });
+
               that.props.actions.applySoundToCell(e.note.name + e.note.octave, that.props.currentCell);
             }
           });
       }
     });
 
+    speech = new Speech();
     if(speech.hasBrowserSupport()) {
       console.log("speech synthesis supported");
 
