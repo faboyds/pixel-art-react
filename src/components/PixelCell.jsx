@@ -7,7 +7,9 @@ export default class PixelCell extends React.Component {
     const keys = ['color', 'width'];
     const isSame = keys.every(
       key => this.props.cell[key] === nextProps.cell[key]
-    );
+    ) && this.props.isCurrentCell === nextProps.isCurrentCell;
+
+
     return !isSame;
   }
   render() {
