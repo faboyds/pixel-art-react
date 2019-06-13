@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
-import socket from 'socket.io';
+import socket_io from 'socket.io';
 import { renderToString } from 'react-dom/server';
 import undoable, { includeAction } from 'redux-undo';
 import express from 'express';
@@ -108,13 +108,14 @@ const server = app.listen(process.env.PORT || PORTSERVER, () => {
   );
 });
 
-// Socket setup
-const io = socket(server);
-
-io.on('connection', socket => {
-  console.log('made socket connection', socket.id);
-
-  socket.on('chat', data => {
-    io.sockets.emit('chat', data);
+const io = socket_io();
+io.attach(server);
+io.on('connection', (socket) => {
+  console.log(`Socket connected: ${  socket.id}`);
+  socket.on('action', (action) => {
+    if(action.type === 'server/hello'){
+      console.log('Got hello data!', action.data);
+      socket.emit('action', {type:'message', data:'good day!'});
+    }
   });
 });

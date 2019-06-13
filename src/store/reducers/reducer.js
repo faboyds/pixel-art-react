@@ -1,4 +1,7 @@
 import { List, Map } from 'immutable';
+import { createStore, applyMiddleware } from 'redux';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
 import paletteReducer from './paletteReducer';
 import framesReducer from './framesReducer';
 import { default as activeFrameReducer, stopGridMusic} from './activeFrameReducer';
@@ -117,3 +120,4 @@ export default function(state = generateDefaultState(), action) {
     )
   });
 }
+
