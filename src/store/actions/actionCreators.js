@@ -79,6 +79,14 @@ export function switchTool(tool) {
   };
 }
 
+export function applySoundToCell(note, id) {
+  return {
+    type: types.APPLY_SOUND_TO_CELL,
+    note,
+    id
+  };
+}
+
 export function playMusic() {
   return {
     type: types.PLAY_MUSIC
