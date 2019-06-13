@@ -88,13 +88,13 @@ const playSound = ({color, paletteColor: colorToPlay}) => {
         note = 'A#4';
         break;
       case '#99ff00':
-        note = 'G4';
+        note = 'B4';
         break;
       case '#28ff00':
         note = 'C5';
         break;
       case '#28ffe8':
-        note = 'C#4';
+        note = 'C#5';
         break;
       case '#007cff':
         note = 'D5';
@@ -115,7 +115,7 @@ const playSound = ({color, paletteColor: colorToPlay}) => {
         break;
     }
 
-    const synth = new Tone.Synth().toMaster();
+    const synth = new Tone.PolySynth().toMaster();
     synth.triggerAttackRelease(note, "8n");
   }
 };
@@ -185,7 +185,7 @@ const playGridMusic = (frames, action) => {
 
     musicTimeouts.push(setTimeout(() => {
       playSound({ color: '', paletteColor: cell });
-    }, 500 * i));
+    }, 350 * i));
 
     i +=1;
   }
@@ -197,6 +197,62 @@ export const stopGridMusic = () => {
     clearTimeout(to);
   }
   musicTimeouts = [];
+};
+
+const applySoundToCell = (action) => {
+
+  let color = GRID_INITIAL_COLOR;
+
+  switch (action.note) {
+    case 'F4':
+      color = '#550000';
+      break;
+    case 'F#4':
+      color = '#740000';
+      break;
+    case 'G4':
+      color = '#b30000';
+      break;
+    case 'G#4':
+      color = '#ee0000';
+      break;
+    case 'A4':
+      color = '#ff6300';
+      break;
+    case 'A#4':
+      color = '#ffec00';
+      break;
+    case 'B4':
+      color = '#99ff00';
+      break;
+    case 'C5':
+      color = '#28ff00';
+      break;
+    case 'C#5':
+      color = '#28ffe8';
+      break;
+    case 'D5':
+      color = '#007cff';
+      break;
+    case 'D#5':
+      color = '#0500ff';
+      break;
+    case 'E5':
+      color = '#4500ea';
+      break;
+    case 'F5':
+      color = '#57009e';
+      break;
+    case 'F#5':
+      color = '#55004f';
+      break;
+    default:
+      break;
+  }
+
+  playSound({ color: '', paletteColor: color });
+
+  action.paletteColor = color;
 };
 
 
@@ -211,7 +267,10 @@ const setCurrentCell = (frames, action)  => {
 export default function(frames, action) {
   switch (action.type) {
     case types.APPLY_PENCIL:
-      playSound(action);
+      // playSound(action);
+      return applyPencil(frames, action);
+    case types.APPLY_SOUND_TO_CELL:
+      applySoundToCell(action);
       return applyPencil(frames, action);
     case types.SET_CURRENT_CELL:
       setCurrentCell(frames, action);

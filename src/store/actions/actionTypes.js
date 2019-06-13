@@ -18,6 +18,7 @@ export const SET_DRAWING = 'SET_DRAWING';
 export const END_DRAG = 'END_DRAG';
 export const SWITCH_TOOL = 'SWITCH_TOOL';
 export const SET_CURRENT_CELL = 'SET_CURRENT_CELL';
+export const APPLY_SOUND_TO_CELL = 'APPLY_SOUND_TO_CELL';
 export const PLAY_MUSIC = 'PLAY_MUSIC';
 export const STOP_MUSIC = 'STOP_MUSIC';
 export const SET_CELL_SIZE = 'SET_CELL_SIZE';

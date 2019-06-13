@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CookieBanner from 'react-cookie-banner';
+import WebMidi from 'webmidi';
 import PixelCanvasContainer from './PixelCanvas';
 import ModalContainer from './Modal';
 import DimensionsContainer from './Dimensions';
@@ -17,8 +18,6 @@ import PlayMusicContainer from './PlayMusic';
 import initialSetup from '../utils/startup';
 import drawHandlersProvider from '../utils/drawHandlersProvider';
 import * as actionCreators from '../store/actions/actionCreators';
-
-import WebMidi from 'webmidi';
 
 let midiInput;
 
@@ -48,16 +47,20 @@ export class App extends React.Component {
       if (err) {
         console.log("WebMidi could not be enabled.", err);
         return;
-      } else {
-        console.log("WebMidi enabled!");
-      }
+      } 
+      console.log("WebMidi enabled!");
+      
 
       midiInput = WebMidi.inputs[0];
 
       midiInput.addListener('noteon', 'all',
         (e) => {
           console.log(`Received 'noteon' message (${  e.note.name  }${e.note.octave  }).`);
-       });
+
+          if(!that.props.playingMusic) {
+            that.props.actions.applySoundToCell(e.note.name + e.note.octave, that.props.currentCell);
+          }
+        });
 
     });
   }
@@ -95,6 +98,10 @@ export class App extends React.Component {
         this.props.actions.playMusic();
       } else {
         this.props.actions.stopMusic();
+      }
+    } else if (e.keyCode === 17 /* ctrl */) {
+      if (!this.props.playingMusic) {
+        this.props.actions.setCurrentCell(this.props.currentCell);
       }
     }
   }
