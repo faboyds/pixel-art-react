@@ -8,7 +8,7 @@ import Root from './components/Root';
 const devMode = process.env.NODE_ENV === 'development';
 const store = configureStore(devMode);
 
-const socket = io.connect(`https://pixel-to-music.herokuapp.com:${  process.env.PORT}`);
+const socket = io.connect('https://pixel-to-music.herokuapp.com');
 
 /*
 send.addEventListener('click', () => {
