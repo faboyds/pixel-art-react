@@ -78,7 +78,8 @@
     "twitter": "^1.7.1",
     "url-loader": "^1.0.1",
     "webmidi": "^2.3.3",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^2.0.4",
+    "babel-core": "^6.26.3"
   },
   "engines": {
     "node": "8.11.1",
