@@ -53,14 +53,16 @@ export class App extends React.Component {
 
       midiInput = WebMidi.inputs[0];
 
-      midiInput.addListener('noteon', 'all',
-        (e) => {
-          console.log(`Received 'noteon' message (${  e.note.name  }${e.note.octave  }).`);
+      if (midiInput) {
+        midiInput.addListener('noteon', 'all',
+          (e) => {
+            console.log(`Received 'noteon' message (${e.note.name}${e.note.octave}).`);
 
-          if(!that.props.playingMusic) {
-            that.props.actions.applySoundToCell(e.note.name + e.note.octave, that.props.currentCell);
-          }
-        });
+            if (!that.props.playingMusic) {
+              that.props.actions.applySoundToCell(e.note.name + e.note.octave, that.props.currentCell);
+            }
+          });
+      }
 
     });
   }
