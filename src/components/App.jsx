@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CookieBanner from 'react-cookie-banner';
 import WebMidi from 'webmidi';
+import Speech from 'speak-tts';
 import PixelCanvasContainer from './PixelCanvas';
 import ModalContainer from './Modal';
 import DimensionsContainer from './Dimensions';
@@ -20,6 +21,8 @@ import drawHandlersProvider from '../utils/drawHandlersProvider';
 import * as actionCreators from '../store/actions/actionCreators';
 
 let midiInput;
+
+const speech = new Speech();
 
 export class App extends React.Component {
   constructor() {
@@ -63,8 +66,24 @@ export class App extends React.Component {
             }
           });
       }
-
     });
+
+    if(speech.hasBrowserSupport()) {
+      console.log("speech synthesis supported");
+
+      speech.init({
+        'lang': 'en-GB',
+        'voice': 'Google UK English Female'
+      }).then((data) => {
+        // The "data" object contains the list of available voices and the voice synthesis params
+        console.log("Speech is ready, voices are available", data);
+
+      }).catch(e => {
+        console.error("An error occured while initializing : ", e)
+      });
+
+
+    }
   }
 
   handleKeyDown(e) {
@@ -86,6 +105,24 @@ export class App extends React.Component {
       this.setState({shiftIsPressed: true});
     }
 
+    if (e.keyCode === 20 /* caps lock */) {
+      if (!this.props.playingMusic) {
+
+        if (!speech.speaking()) {
+
+          speech.speak({
+            text: 'The key bindings for this app navigations are. tab for moving one position forward. shift + tab' +
+              ' for moving one position backwards. control to ear the current position. shift + control to play or stop the whole music.',
+          }).then(() => {
+            console.log("Success !");
+          }).catch(err => {
+            console.error("An error occurred :", err);
+          });
+        } else {
+          speech.cancel();
+        }
+      }
+    }
   }
 
   handleKeyUp(e) {
