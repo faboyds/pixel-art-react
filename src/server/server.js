@@ -112,5 +112,9 @@ const server = app.listen(process.env.PORT || PORTSERVER, () => {
 const io = socket(server);
 
 io.on('connection', socket => {
-  console.log('made socket connection');
+  console.log('made socket connection', socket.id);
+
+  socket.on('chat', data => {
+    io.sockets.emit('chat', data);
+  });
 });
