@@ -2,7 +2,7 @@
   "name": "pixel-art-react",
   "version": "3.7.0",
   "description": "Draw and animate Pixel Art, then export the results to CSS, share or download them, powered by React",
-  "author": "Javier Valencia Romero",
+  "author": "Fábio Lourenço",
   "scripts": {
     "lint": "eslint **/*.{js,jsx}",
     "csslint": "stylelint src/**/*.{css,js,jsx}",
@@ -22,7 +22,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jvalen/pixel-art-react"
+    "url": "https://github.com/faboyds/pixel-art-react"
   },
   "keywords": [
     "pixel",

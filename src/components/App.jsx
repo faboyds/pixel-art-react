@@ -33,6 +33,7 @@ export class App extends React.Component {
       helpOn: false,
       showCookiesBanner: true,
       shiftIsPressed: false,
+      hasMidiKeyboard: false,
     };
     Object.assign(this, drawHandlersProvider(this));
 
@@ -61,6 +62,7 @@ export class App extends React.Component {
       midiInput = WebMidi.inputs[0];
 
       if (midiInput) {
+        this.setState({hasMidiKeyboard: true});
         midiInput.addListener('noteon', 'all',
           (e) => {
             console.log(`Received 'noteon' message (${e.note.name}${e.note.octave}).`);
@@ -410,6 +412,13 @@ export class App extends React.Component {
             </div>
           </div>
         </div>
+
+        {
+          !this.state.hasMidiKeyboard &&
+          <div style={{ 'background': 'red', 'color': 'white', 'padding': '8px' }}>
+            You need a MIDI keyboard in order to use the features for blind people.
+          </div>
+        }
 
 
         <div>
